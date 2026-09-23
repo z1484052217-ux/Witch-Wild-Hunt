@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "witch-wild-hunt",
+  "main": "vinext/server/fetch-handler",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "preview_urls": false,
+  "send_metrics": false,
+  "keep_vars": true,
+  "vars": {
+    "ADMIN_AUTH_MODE": "email",
+    "ADMIN_OTP_EMAIL": "1484052217@qq.com",
+    "EMAIL_FROM": "onboarding@resend.dev"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "witch-wild-hunt",
+      "database_id": "65efe47f-c428-4d34-8125-80f5704425c1",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "witch-wild-hunt-images"
+    }
+  ]
+}
