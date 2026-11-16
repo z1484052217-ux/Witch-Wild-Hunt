@@ -1,7 +1,7 @@
-import rules from '@/data/rule-sections.json';
+import rules from '@/data/rule-articles.json';
 import world from '@/data/world-sections.json';
 export type ArticleKind = 'rule' | 'world' | 'character';
-export type ArticleBlock = {id:string;type:'paragraph'|'heading'|'image';text?:string;url?:string;caption?:string};
+export type ArticleBlock = {id:string;type:'paragraph'|'heading'|'image'|'subheading'|'caption'|'table'|'icons'|'links';text?:string;url?:string;src?:string;alt?:string;caption?:string;width?:number;height?:number;headers?:string[];rows?:string[][];items?:{src?:string;text?:string;label?:string;page?:number}[]};
 export type Article = {id:string;kind:ArticleKind;title:string;summary:string;blocks:ArticleBlock[];order:number;characterId?:string;revision?:number;hasDraft?:boolean;published?:boolean};
 export type CardFormat = {height:number;width:number;radius:number;previewWidth:number};
 export type DisplaySettings = {formats:Record<string,CardFormat>;motion:boolean;glow:number;fog:number};
@@ -15,5 +15,5 @@ const fromSections = (sections:any[],kind:ArticleKind):Article[] => sections.map
   id:`${kind}-${s.id}`,kind,title:s.title,summary:s.summary||'',order:i,
   blocks:(s.paragraphs||[]).map((text:string,j:number)=>({id:`p${j}`,type:'paragraph',text}))
 }));
-export const initialArticles:Article[]=[...fromSections(rules,'rule'),...fromSections(world,'world')];
+export const initialArticles:Article[]=[...(rules as Article[]),...fromSections(world,'world')];
 export function newArticle(kind:ArticleKind,order=0):Article{return {id:'',kind,title:'',summary:'',order,blocks:[{id:crypto.randomUUID(),type:'paragraph',text:''}],revision:0,published:false};}

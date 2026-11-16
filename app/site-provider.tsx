@@ -1,14 +1,11 @@
 'use client';
-import {createContext,useContext,useEffect,useRef,useState} from 'react';
-import {Article,DisplaySettings,defaultSettings,initialArticles} from '@/lib/site-content';
-import {CATALOG_VERSION} from '@/lib/cards';
-const Context=createContext({articles:initialArticles,settings:defaultSettings,error:'',reload:()=>{}});
+import {createContext,useContext,useEffect,useRef} from 'react';
+import {DisplaySettings,defaultSettings,initialArticles} from '@/lib/site-content';
+const publishedContent={articles:initialArticles,settings:defaultSettings};
+const Context=createContext(publishedContent);
 export const useSiteContent=()=>useContext(Context);
 export default function SiteProvider({children}:{children:React.ReactNode}){
-  const [articles,setArticles]=useState<Article[]>(initialArticles),[settings,setSettings]=useState<DisplaySettings>(defaultSettings),[error,setError]=useState('');
-  async function reload(){try{const r=await fetch('/api/site-content',{cache:'no-store'});if(!r.ok)throw new Error();const j:any=await r.json();if(j.catalogVersion!==CATALOG_VERSION)throw new Error();setArticles(j.articles);setSettings(j.settings);setError('')}catch{setError('最新文章暂不可用，当前显示已载入内容。')}}
-  useEffect(()=>{reload();const timer=setInterval(reload,60000);addEventListener('focus',reload);return()=>{clearInterval(timer);removeEventListener('focus',reload)}},[]);
-  return <Context.Provider value={{articles,settings,error,reload}}><Atmosphere settings={settings}/>{children}</Context.Provider>;
+  return <Context.Provider value={publishedContent}><Atmosphere settings={publishedContent.settings}/>{children}</Context.Provider>;
 }
 function Atmosphere({settings}:{settings:DisplaySettings}){
   const ref=useRef<HTMLDivElement>(null);
